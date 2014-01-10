@@ -1,0 +1,90 @@
+clothSim README
+
+Arash Ghodsi (aghodsi)
+CMPS161 - Animation and Visualization
+Winter 2011
+
+clothSim Description:
+Create physically based animation for a swinging hula skirt. The skirt is to be modeled as a
+triangular mesh cylinder which is textured to look like a hula skirt. Each edge (including the
+top-left to bottom-right diagonals) acts as a spring force on its vertices. Thus each vertex is
+acted on by six spring forces (above, below, left, right, upper diagonal, and lower diagonal). The
+vertices are also affected by gravity. The last force affecting the mesh is provided by an
+oscillatory motion enacted on the top two rows of vertices. This force only indirectly affects
+subsequent rows of vertices via the springs. The springs become looser near the bottom of the skirt
+while the springs near the top are stiffer.
+
+clothSim Solution:
+I achieved all of the requirements of this project. The skirt is modeled as a triangle mesh
+cylinder which is textured as a hula skirt. Each edge acts as a spring force on its vertices. Note:
+I chose to use top-left to bottom-right diagonal edges.
+Each vertex is affected by its six neighboring spring forces, by gravity, and by spring damping.
+The only rows directly affected by the oscillatory motion are the top two rows of free-motion
+vertices; all subsequent rows' vertices are affected indirectly by their spring forces. The user can
+adjust the motion of the skirt by increasing or decreasing both the amplitude and frequency of the
+oscillatory motion. They may also switch between a 2D swing about the z-axis or a 3D swing about
+both the x-axis and z-axis, independently. You can find the controls below.
+The vertex positions are determined using a system of force equations (one for each spring force,
+one for gravity, one for the oscillatory motion, and one for spring damping) which are applied as
+acceleration. The velocity of a given vertex is determined via Euler integration in which all of the
+accelerations are summed up. The position of a given vertex is also determined via Euler integration
+in which all the velocities are summed up.
+Note: I used Hooke's Law to simulate the springs at each edge. Also, the spring constant, Ks,
+decreased row by row toward the bottom of the skirt thus making the skirt looser near the bottom and
+stiffer near the top.
+
+To compile and run the program from the command line type:
+$ make
+$ clothSim
+Note: The following libraries are required in order to build the sim - libglut32, libglu32 and
+libopengl32
+
+//::CONTROLS:://////////////////////////////////////////////////////////////////////////////////////
+Mouse right-click:      Switches in and out of wireframe rendering
+Mouse click-and-hold:   Rotates the camera around the skirt horizontally
+1:                      2D rotation
+2:                      3D rotation
+Up and Down arrows:     adjusts the amplitude up or down, respectively
+Left and Right arrows:  adjusts the frequency up or down, respectively
+Esc:                    Exits the program
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Files: main.cpp, skirt.h, skirt.cpp, quaternion.h, quaternion.cpp, Makefile, README, assets, tech_writeup.pdf
+
+main.cpp:
+Where the openGL IO occurs. Responsible for user mouse/keyboard input and displaying the skirt.
+
+skirt.h:
+Interface for the Skirt class. This class is responsible for the following:
+1: Generating the skirt as a triangular mesh
+2: Texturing the mesh as a hula skirt
+3: Maintaining the spring force system governing the animation of the skirt
+4: Animating the skirt using rotation quaternions (versors)
+
+skirt.cpp:
+Implementation for the Skirt class
+
+quaternion.h:
+Interface for the Quaternion class. This class is a wrapper class used for rotation quaternions or
+versors. It can calculate the inverse, product, and sum for quaternions. It can also normalize a
+quaternion and calculate slerp (spherical linear interoplation).
+
+quaternion.cpp:
+Implementation for the Quaternion class
+
+Makefile:
+The makefile used to complile this project.
+To compile: at the command line type make
+To run: at the command line type clothSim
+
+README:
+This file.
+
+clothSim.exe:
+A prebuilt executable
+
+assets:
+Includes the texture used, a couple variant textures, and the original source image.
+
+tech_writeup.pdf:
+A short technical paper describing the problem, my approach, and results.
